@@ -52,7 +52,7 @@
     if (Array.isArray(collection)) {
       collectionCopy = [...Array(collection.length)];
       for (var j = 0; j < collectionCopy.length; j++) {
-        collectionCopy[j] = Number.toString(j);
+        collectionCopy[j] = String(j);
       }
     }
     for (var key in collectionCopy) {
@@ -109,50 +109,19 @@
   // Produce a duplicate-free version of the array.
   _.uniq = function(array, isSorted, iterator) {
 
-    var iterator = arguments[2];
 
 
+    if (isSorted && !iterator) {
+      return Array.from(new Set(array));
 
-
-    if (isSorted) {
-      return array;
+    } else if (iterator) {
+      
+      return Array.from(new Set(_.each(array, iterator)));
     }
 
-    var arrDict = {};
-
-    for (var arr of array) {
-      if (arrDict[arr] === undefined) {
-        arrDict[arr] = 1;
-      } else {
-
-        arrDict[arr] = arrDict[arr] + 1;
-
-      }
-    }
-
-    var arrCopy = [];
-    var newArr = [];
-
-    var i = 0;
-    var currItem;
-
-    if (iterator !== undefined) {
-      arrCopy = iterator(array);
-
-    } else {
-      arrCopy = array.slice();
-
-    }
-    
-
-    for (var element of arrCopy) {
-      if (arrDict[element] > 0) {
-        newArr.push(element);
-        arrDict[element] = 0;
-      }
-    }
-
-    return newArr;
+    else {
+      return Array.from(new Set(array)); 
+    } 
 
     
 
@@ -165,6 +134,20 @@
     // map() is a useful primitive iteration function that works a lot
     // like each(), but in addition to running the operation on all
     // the members, it also maintains an array of results.
+
+    // // debugger;
+
+    // iterator = function (x) {
+    //   return x*x;
+
+    // }
+
+    // console.log(iterator);
+    // var test = _.each(collection, iterator);
+    // console.log(test);
+    // console.log(collection);
+
+
   };
 
   /*
