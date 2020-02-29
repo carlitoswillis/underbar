@@ -47,6 +47,18 @@
   // Note: _.each does not have a return value, but rather simply runs the
   // iterator function over each item in the input collection.
   _.each = function(collection, iterator) {
+    var i = 0;
+    var collectionCopy = collection;
+    if (Array.isArray(collection)) {
+      collectionCopy = [...Array(collection.length)];
+      for (var j = 0; j < collectionCopy.length; j++) {
+        collectionCopy[j] = Number.toString(j);
+      }
+    }
+    for (var key in collectionCopy) {
+      iterator(_.identity(collection[key]), Array.isArray(collection) ? i : key , collection);
+      i++;
+    }
   };
 
   // Returns the index at which value can be found in the array, or -1 if value
@@ -68,16 +80,83 @@
 
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, test) {
+    var newCollection = [];
+    for (var item of collection) {
+      if (test(item)) {
+        newCollection.push(item);
+      }
+    }
+    return newCollection;
+
+    
   };
 
   // Return all elements of an array that don't pass a truth test.
   _.reject = function(collection, test) {
     // TIP: see if you can re-use _.filter() here, without simply
     // copying code in and modifying it
+
+    var newCollection = [];
+
+    for (var item of collection) {
+      if (!test(item)) {
+        newCollection.push(item);
+      }
+    }
+    return newCollection;
   };
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array, isSorted, iterator) {
+
+    var iterator = arguments[2];
+
+
+
+
+    if (isSorted) {
+      return array;
+    }
+
+    var arrDict = {};
+
+    for (var arr of array) {
+      if (arrDict[arr] === undefined) {
+        arrDict[arr] = 1;
+      } else {
+
+        arrDict[arr] = arrDict[arr] + 1;
+
+      }
+    }
+
+    var arrCopy = [];
+    var newArr = [];
+
+    var i = 0;
+    var currItem;
+
+    if (iterator !== undefined) {
+      arrCopy = iterator(array);
+
+    } else {
+      arrCopy = array.slice();
+
+    }
+    
+
+    for (var element of arrCopy) {
+      if (arrDict[element] > 0) {
+        newArr.push(element);
+        arrDict[element] = 0;
+      }
+    }
+
+    return newArr;
+
+    
+
+
   };
 
 
