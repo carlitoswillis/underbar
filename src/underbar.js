@@ -46,7 +46,8 @@
   //
   // Note: _.each does not have a return value, but rather simply runs the
   // iterator function over each item in the input collection.
-  _.each = function(collection, iterator) {
+  _.each = function(collection, iterator=_.identity) {
+
     var i = 0;
     var collectionCopy = collection;
     if (Array.isArray(collection)) {
@@ -80,6 +81,7 @@
 
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, test) {
+
     var newCollection = [];
     for (var item of collection) {
       if (test(item)) {
@@ -96,33 +98,36 @@
     // TIP: see if you can re-use _.filter() here, without simply
     // copying code in and modifying it
 
-    var newCollection = [];
 
-    for (var item of collection) {
-      if (!test(item)) {
-        newCollection.push(item);
-      }
-    }
-    return newCollection;
+    return _.filter(collection, (x) => !_.filter(collection, test).includes(x));
+
   };
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array, isSorted, iterator) {
 
 
+    if (isSorted && iterator === undefined) {
+      _.each(array, _.identity);
+      return Array.from(new Set();
 
-    if (isSorted && !iterator) {
-      return Array.from(new Set(array));
+    } else if (iterator !== undefined) {
+      var arr = array.slice();
+      _.each(arr, iterator);
 
-    } else if (iterator) {
-      
-      return Array.from(new Set(_.each(array, iterator)));
+      var setArr = new Set(arr);
+
+      arr = Array.from(setArr);
+
+      for (var i = 0; i < array.length; i++) {
+        
+      }
+      return arr;
     }
 
     else {
       return Array.from(new Set(array)); 
     } 
-
     
 
 
@@ -134,20 +139,6 @@
     // map() is a useful primitive iteration function that works a lot
     // like each(), but in addition to running the operation on all
     // the members, it also maintains an array of results.
-
-    // // debugger;
-
-    // iterator = function (x) {
-    //   return x*x;
-
-    // }
-
-    // console.log(iterator);
-    // var test = _.each(collection, iterator);
-    // console.log(test);
-    // console.log(collection);
-
-
   };
 
   /*
