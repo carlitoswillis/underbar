@@ -48,18 +48,10 @@
   // iterator function over each item in the input collection.
   _.each = function(collection, iterator=_.identity) {
 
-    var i = 0;
-    var collectionCopy = collection;
-    if (Array.isArray(collection)) {
-      collectionCopy = [...Array(collection.length)];
-      for (var j = 0; j < collectionCopy.length; j++) {
-        collectionCopy[j] = String(j);
-      }
+    for (var key in collection) {
+      iterator(Array.isArray(collection) ? collection[Number(key)] : collection[key], Array.isArray(collection) ? Number(key) : key, collection);
     }
-    for (var key in collectionCopy) {
-      iterator(_.identity(collection[key]), Array.isArray(collection) ? i : key , collection);
-      i++;
-    }
+
   };
 
   // Returns the index at which value can be found in the array, or -1 if value
@@ -83,11 +75,15 @@
   _.filter = function(collection, test) {
 
     var newCollection = [];
-    for (var item of collection) {
+
+    _.each(collection, function (item) {
+
       if (test(item)) {
         newCollection.push(item);
       }
-    }
+
+    });
+
     return newCollection;
 
     
@@ -97,34 +93,37 @@
   _.reject = function(collection, test) {
     // TIP: see if you can re-use _.filter() here, without simply
     // copying code in and modifying it
-
-
     return _.filter(collection, (x) => !_.filter(collection, test).includes(x));
   };
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array, isSorted, iterator) {
-    if (isSorted && iterator === undefined) {
-      _.each(array, _.identity);
-      return Array.from(new Set());
 
-    } else if (iterator !== undefined) {
-      var arr = array.slice();
-      _.each(arr, iterator);
 
-      var setArr = new Set(arr);
 
-      arr = Array.from(setArr);
-
-      for (var i = 0; i < array.length; i++) {
+    var result = [];
+    var seen = [];
+    
+    for (var i = 0; i < array.length; i++) {
+      var value = array[i];
+      var computed = iterator ? iterator(value, i, array) : value;
+      if (isSorted && iterator !== undefined) {
+        if (!i || seen !== computed) result.push(value);
+        seen = computed;
+      } else if (iterator) {
         
+        if (!_.contains(seen, computed)) {
+          seen.push(computed);
+          result.push(value);
+        }
+      } else if (!_.contains(result, value)) {
+        result.push(value);
       }
-      return arr;
     }
 
-    else {
-      return Array.from(new Set(array)); 
-    } 
+    return Array.from(new Set(result));
+
+  
 
   };
 
@@ -134,6 +133,24 @@
     // map() is a useful primitive iteration function that works a lot
     // like each(), but in addition to running the operation on all
     // the members, it also maintains an array of results.
+
+    var newCollection;
+
+    if (Array.isArray(collection)) {
+      newCollection = collection.slice();
+
+    } else {
+      newCollection = Object.assign({}, collection);
+    }
+
+
+    for (var key of newCollection.keys()) {
+      newCollection[Array.isArray(newCollection) ? Number(key) : key] = iterator(Array.isArray(newCollection) ? newCollection[Number(key)] : newCollection[key]);
+    }
+
+    return newCollection;
+
+
   };
 
   /*
