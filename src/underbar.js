@@ -100,16 +100,13 @@
 
 
     return _.filter(collection, (x) => !_.filter(collection, test).includes(x));
-
   };
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array, isSorted, iterator) {
-
-
     if (isSorted && iterator === undefined) {
       _.each(array, _.identity);
-      return Array.from(new Set();
+      return Array.from(new Set());
 
     } else if (iterator !== undefined) {
       var arr = array.slice();
@@ -128,8 +125,6 @@
     else {
       return Array.from(new Set(array)); 
     } 
-    
-
 
   };
 
