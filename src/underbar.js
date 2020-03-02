@@ -213,8 +213,8 @@
       for (var key in collection) {
 
           if (i === 0) {
-
             accumulation = Array.isArray(collection) ? collection[Number(key)] : collection[key];
+
             i++;
 
           } else {
@@ -246,7 +246,28 @@
 
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
-    // TIP: Try re-using reduce() here.
+
+    // if (arguments[1] === undefined) {
+    //   iterator = true;
+    // }
+
+    if ((Array.isArray(collection) && collection.length === 0)) {
+      return true;
+    } else if (Array.isArray(collection) && iterator !== undefined) {
+      if (collection.length === _.filter(collection, iterator).length) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return _.reduce(collection, function (x, y) {
+        return x && y;
+      });
+    }
+
+    
+
+    
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
