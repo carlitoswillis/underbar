@@ -273,7 +273,22 @@
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
+
+
+    if ((Array.isArray(collection) && collection.length === 0)) {
+      return false;
+    }
+
+    if (iterator === undefined) {
+      return _.reduce(collection, function (x, y){
+        return x || y;
+      });
+    }
     // TIP: There's a very clever way to re-use every() here.
+    return !(_.every(collection, function (x){
+      return !(iterator(x));
+
+    }) && !(_.every(collection, iterator)));
   };
 
 
