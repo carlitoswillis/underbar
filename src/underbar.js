@@ -396,6 +396,31 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+
+    var alreadyCalledLibary = {};
+    var result;
+
+    
+    var newFunc = function() {
+
+
+
+      if (!_.contains(Object.keys(alreadyCalledLibary), JSON.stringify(arguments))) {
+        // TIP: .apply(this, arguments) is the standard way to pass on all of the
+        // infromation from one function call to another.
+        result = func.apply(this, arguments);
+        alreadyCalledLibary[JSON.stringify(arguments)] = result;
+        return result;
+
+      } else {
+
+        return alreadyCalledLibary[JSON.stringify(arguments)];
+      }
+
+      
+    };
+
+    return newFunc;
   };
 
   // Delays a function for the given number of milliseconds, and then calls
