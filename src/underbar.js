@@ -462,7 +462,7 @@
     var copiedArr = array.slice();
 
     for (var i = 0; i < length; i++) {
-      var rndNum = getRnd(1, copiedArr.length-1);
+      var rndNum = getRnd(0, copiedArr.length);
       randomizedArr.push(copiedArr.splice(rndNum, 1)[0]);
 
     }
