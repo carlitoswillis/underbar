@@ -457,7 +457,6 @@
     }
 
 
-
     var length = array.length;
     var randomizedArr = [];
     var copiedArr = array.slice();
@@ -467,9 +466,6 @@
       randomizedArr.push(copiedArr.splice(rndNum, 1)[0]);
 
     }
-
-
-
 
     return randomizedArr;
     
